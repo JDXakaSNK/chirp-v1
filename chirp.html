@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="it" data-theme="rust" data-band="audible">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scambia testo, dati e immagini tra dispositivi vicini usando altoparlante e microfono, senza cronologia.">
+  <meta name="theme-color" content="#faf7f1">
+  <title>Chirp by Globetrotta</title>
+  <style>
+:root {
+  color-scheme: light;
+  --paper: #faf7f1;
+  --white: #fffdf9;
+  --ink: #2b2622;
+  --muted: #665e56;
+  --line: #e8ded2;
+  --accent: #a33d27;
+  --accent-dark: #822f1e;
+  --accent-soft: #f5e6dc;
+  --secondary: #f8f1e9;
+  --recess: #f3ede5;
+  --field: #fffefa;
+  --field-edge: #e0d6c9;
+  --button-text: #fff;
+  --button-disabled: #ecd9ce;
+  --button-disabled-text: #73514b;
+  --scope-glow: #f5e4d6;
+  --scope-haze: #f9f0e6;
+  --wave: #b44a32;
+  --success: #355b40;
+  --success-fill: #f2f5ec;
+  --success-edge: #dee6d6;
+  --error: #973521;
+  --shadow: #6d3d2d55;
+  --sans: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+:root[data-theme="blue"] {
+  --paper: #f0f6fa;
+  --white: #fbfdff;
+  --ink: #203342;
+  --muted: #475e70;
+  --line: #d6e5ee;
+  --accent: #285d80;
+  --accent-dark: #214c68;
+  --accent-soft: #dfedf7;
+  --secondary: #e9f2f8;
+  --recess: #e8f0f6;
+  --field: #fafdff;
+  --field-edge: #c8dae7;
+  --button-disabled: #dfebf4;
+  --button-disabled-text: #466578;
+  --scope-glow: #dbeaf6;
+  --scope-haze: #edf4f9;
+  --wave: #3878a0;
+  --shadow: #40627a50;
+}
+
+:root[data-theme="green"] {
+  --paper: #f1f5ee;
+  --white: #fcfdf9;
+  --ink: #27342a;
+  --muted: #526153;
+  --line: #d8e2d5;
+  --accent: #3d654d;
+  --accent-dark: #2e513c;
+  --accent-soft: #e0eadc;
+  --secondary: #eaf1e6;
+  --recess: #e9efe6;
+  --field: #fdfefb;
+  --field-edge: #cedacb;
+  --button-disabled: #e0e8db;
+  --button-disabled-text: #47634e;
+  --scope-glow: #dcebd8;
+  --scope-haze: #eef3e9;
+  --wave: #507e61;
+  --shadow: #3d674d4a;
+}
+
+:root[data-theme="silver"] {
+  --paper: #eff0f2;
+  --white: #fbfcfd;
+  --ink: #262c33;
+  --muted: #4e5863;
+  --line: #d8dde2;
+  --accent: #465566;
+  --accent-dark: #343f4c;
+  --accent-soft: #e4e8ed;
+  --secondary: #e9ecef;
+  --recess: #e8ebee;
+  --field: #fdfdfe;
+  --field-edge: #cfd5dc;
+  --button-disabled: #e2e6eb;
+  --button-disabled-text: #505c6a;
+  --scope-glow: #dde2e9;
+  --scope-haze: #eef0f4;
+  --wave: #627081;
+  --shadow: #46556650;
+}
+
+:root[data-theme="winamp"] {
+  color-scheme: dark;
+  --paper: #1b1e23;
+  --white: #252931;
+  --ink: #f0f4ee;
+  --muted: #b1beb6;
+  --line: #424b50;
+  --accent: #adf387;
+  --accent-dark: #d5ffc3;
+  --accent-soft: #303c32;
+  --secondary: #242a2c;
+  --recess: #181e20;
+  --field: #131a18;
+  --field-edge: #4a5c50;
+  --button-text: #132015;
+  --button-disabled: #34413a;
+  --button-disabled-text: #bbcabd;
+  --scope-glow: #243a28;
+  --scope-haze: #141d17;
+  --wave: #9ff478;
+  --success: #b7f49c;
+  --success-fill: #1f3026;
+  --success-edge: #465f4e;
+  --error: #ffb0a6;
+  --shadow: #060809aa;
+  --serif: "IBM Plex Mono", Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+button, textarea, input, select { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.wrap { width: min(1100px, calc(100% - 96px)); margin-inline: auto; }
+
+.page-header {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  gap: 18px;
+}
+.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
+.brand strong { display: block; font-size: 21px; line-height: 1; letter-spacing: -.04em; }
+.brand small { display: block; margin-top: 4px; font-size: 10px; line-height: 1; color: var(--muted); }
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: var(--accent);
+  color: var(--button-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5px;
+}
+.brand-mark i, .button-wave i { display: block; width: 2px; height: 7px; border-radius: 3px; background: currentColor; }
+.brand-mark i:nth-child(2), .brand-mark i:nth-child(4) { height: 13px; }
+.brand-mark i:nth-child(3) { height: 20px; }
+.header-link { font-size: 13px; font-weight: 650; text-decoration: none; color: var(--muted); }
+.header-link span { color: var(--accent); margin-left: 4px; }
+.header-link:hover { color: var(--accent); }
+.header-actions { display: flex; align-items: center; justify-content: end; gap: 20px; }
+.theme-picker { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; font-weight: 650; }
+.theme-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; }
+.theme-picker select { min-height: 34px; padding: 4px 7px; color: var(--ink); background: var(--white); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr .95fr;
+  align-items: center;
+  min-height: 302px;
+  gap: 18px;
+  padding-block: 38px 44px;
+}
+.hero h1 {
+  margin: 0;
+  font: 400 clamp(53px, 6.1vw, 85px)/.98 var(--serif);
+  letter-spacing: -.067em;
+}
+.hero h1 em { font-weight: inherit; color: var(--accent); }
+.hero p { margin: 22px 0 0; color: var(--muted); line-height: 1.56; font-size: 15px; }
+.scope {
+  height: 237px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 26px;
+  background: radial-gradient(ellipse at center, var(--scope-glow) 0%, var(--scope-haze) 47%, transparent 74%);
+}
+.scope-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--wave) 1px, transparent 1.5px);
+  background-size: 13px 13px;
+  opacity: .32;
+  mask-image: radial-gradient(ellipse, #000 5%, transparent 70%);
+}
+.scope-axis {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--wave) 28% 72%, transparent);
+  opacity: .34;
+}
+.scope-orbit { position: absolute; aspect-ratio: 1; border: 1px solid var(--wave); border-radius: 50%; opacity: .27; }
+.orbit-outer { width: 233px; }
+.orbit-middle { width: 181px; }
+.orbit-inner { width: 129px; }
+.wave { height: 104px; display: flex; align-items: center; gap: clamp(4px, .66vw, 9px); color: var(--wave); }
+.wave i { width: 3px; height: var(--h); min-height: 4px; border-radius: 8px; background: currentColor; }
+.wave i:nth-child(-n+5), .wave i:nth-last-child(-n+5) { opacity: .58; }
+.scope:is([data-state="sending"], [data-state="listening"]) .wave i { animation: waveform .64s ease-in-out infinite alternate; }
+.scope .wave i:nth-child(3n) { animation-delay: -.34s; }
+.scope .wave i:nth-child(3n + 1) { animation-delay: -.14s; }
+.scope[data-state="listening"] .wave, .scope[data-state="received"] .wave { color: var(--success); }
+@keyframes waveform { from { transform: scaleY(.35); } to { transform: scaleY(1.04); } }
+
+.console {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .49fr);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: 0 13px 35px -24px var(--shadow);
+  overflow: hidden;
+}
+.console-main { min-width: 0; padding: 26px 29px 17px; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 11px; background: var(--recess); gap: 4px; margin-bottom: 23px; }
+.tabs button { min-height: 40px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--muted); font-size: 14px; font-weight: 650; }
+.tabs button:hover { color: var(--accent); }
+.tabs button[aria-selected="true"] { border-color: var(--line); color: var(--accent); background: var(--white); box-shadow: 0 1px 3px #4933250f; }
+.tab-symbol { font-size: 18px; line-height: .8; margin-right: 4px; }
+.compose-head, .compose-foot, .send-controls, .volume-label, .received-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.compose-head { margin-bottom: 9px; }
+#message-label { font-size: 14px; font-weight: 700; }
+.format { display: flex; padding: 0; margin: 0 0 0 auto; border: 0; gap: 2px; align-items: center; }
+.format input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.format label { padding: 6px 10px; border-radius: 7px; color: var(--muted); font-size: 12px; font-weight: 650; cursor: pointer; }
+.format label:hover { color: var(--accent); }
+.format input:checked + label { color: var(--accent-dark); background: var(--accent-soft); }
+.format input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+.format input:disabled + label { cursor: default; opacity: .7; }
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 102px;
+  padding: 13px 14px;
+  border: 1px solid var(--field-edge);
+  background: var(--field);
+  border-radius: 11px;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.45;
+  resize: vertical;
+}
+textarea::placeholder { color: var(--muted); }
+textarea[aria-invalid="true"] { border-color: var(--accent); }
+.compose-foot { margin-top: 8px; font-size: 12px; color: var(--muted); align-items: start; }
+#byte-count { white-space: nowrap; font-variant-numeric: tabular-nums; }
+#byte-count[data-tone="error"] { color: var(--accent); font-weight: 700; }
+.send-controls { margin-top: 18px; }
+.volume { width: min(165px, 40%); }
+.volume-label { font-size: 12px; color: var(--muted); font-weight: 620; }
+.volume-label output { color: var(--accent-dark); font-variant-numeric: tabular-nums; }
+.volume input { display: block; width: 100%; min-height: 18px; margin: 4px 0 0; accent-color: var(--accent); }
+.send-action { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 7px 12px; }
+.duration { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.primary { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 10px; min-height: 45px; padding: 10px 15px; background: var(--accent); color: var(--button-text); font-size: 14px; font-weight: 700; transition: background .15s; }
+.primary:hover:not(:disabled) { background: var(--accent-dark); }
+.primary:disabled { color: var(--button-disabled-text); background: var(--button-disabled); cursor: default; }
+.button-wave { display: flex; align-items: center; gap: 2px; }
+.button-wave i:nth-child(2) { height: 14px; }
+.button-wave i:nth-child(3) { height: 11px; }
+.status { color: var(--muted); margin: 9px 0 0; min-height: 17px; font-size: 12px; line-height: 1.4; }
+.status[data-tone="error"], #message-help[data-tone="error"] { color: var(--error); }
+.status[data-tone="success"] { color: var(--success); }
+
+.instructions { padding: 29px 26px; border-left: 1px solid var(--line); background: var(--secondary); scroll-margin-top: 12px; }
+.instructions h2, .receive-intro h2 { font: 400 30px/1.04 var(--serif); letter-spacing: -.045em; margin: 0; }
+.instructions p, .receive-intro p { font-size: 13px; line-height: 1.5; color: var(--muted); margin: 8px 0 0; }
+.instructions ol { padding: 0; margin: 22px 0; display: grid; gap: 16px; list-style: none; }
+.instructions li { display: flex; gap: 11px; align-items: start; }
+.instructions li strong { display: block; font-size: 13px; line-height: 1.25; margin-top: 1px; }
+.instructions li p { margin-top: 4px; }
+.step-mark { flex: 0 0 29px; height: 29px; display: grid; place-items: center; color: var(--accent); background: var(--accent-soft); border-radius: 8px; font-weight: 700; }
+.instructions .audio-note { display: flex; align-items: baseline; gap: 8px; margin: 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; }
+.note-dot { display: inline-block; flex: 0 0 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+.receive-intro { margin: 0 0 16px; }
+.receive-intro p { margin-top: 5px; }
+.mic-mark { display: block; position: relative; width: 33px; height: 33px; margin-bottom: 9px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
+.mic-mark i { position: absolute; width: 7px; height: 13px; left: 13px; top: 6px; border: 1.6px solid currentColor; border-radius: 7px; }
+.mic-mark::before { content: ""; position: absolute; top: 12px; left: 10px; width: 13px; height: 10px; border: 1.6px solid currentColor; border-top: 0; border-radius: 0 0 8px 8px; }
+.mic-mark::after { content: ""; position: absolute; width: 1.6px; height: 4px; top: 21px; left: 16px; background: currentColor; }
+.received { margin-top: 15px; padding: 12px; background: var(--success-fill); border: 1px solid var(--success-edge); border-radius: 11px; }
+.received-head h3 { margin: 0; font-size: 13px; }
+.received-head small { color: var(--success); font-weight: 600; margin-left: 5px; }
+.received-head button, .text-button { padding: 4px; border: 0; border-radius: 4px; background: transparent; color: var(--accent-dark); font-size: 12px; text-decoration: underline; }
+.received pre { margin: 9px 0 0; font-family: var(--sans); font-size: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.image-fields { display: flex; gap: 14px; align-items: center; min-height: 127px; padding: 14px; border: 1px dashed var(--field-edge); border-radius: 11px; background: var(--field); }
+.image-controls { min-width: 0; flex: 1; }
+.image-controls input { display: block; max-width: 100%; font-size: 12px; color: var(--muted); }
+.image-controls input::file-selector-button { margin-right: 9px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; color: var(--accent-dark); background: var(--accent-soft); font: inherit; font-weight: 650; cursor: pointer; }
+.image-controls .text-button { margin: 4px 0 0 -4px; }
+.pixel-preview { display: block; flex: 0 0 auto; width: 96px; height: 96px; border: 1px solid var(--field-edge); border-radius: 6px; background: #f8f8f5; image-rendering: pixelated; }
+.received .pixel-preview { margin-top: 8px; }
+
+.ultrasound-settings { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; padding: 15px 24px; border-bottom: 1px solid var(--line); background: var(--recess); }
+.ultrasound-settings h2 { margin: 0; font: 700 14px/1.4 var(--serif); }
+.ultrasound-settings h2 span { margin-left: 6px; color: var(--muted); font-size: 11px; font-weight: 400; }
+.ultrasound-settings p { color: var(--muted); margin: 4px 0 0; font-size: 12px; line-height: 1.45; }
+.band-switch { display: inline-flex; align-items: center; gap: 8px; flex: none; color: var(--ink); font-size: 12px; font-weight: 650; cursor: pointer; }
+.band-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch-track { display: inline-flex; align-items: center; width: 34px; height: 19px; padding: 2px; border: 1px solid var(--field-edge); border-radius: 12px; background: var(--white); }
+.switch-track::before { content: ""; display: block; width: 13px; height: 13px; border-radius: 50%; background: var(--muted); transition: transform .15s; }
+.band-switch input:checked + .switch-track { background: var(--accent); border-color: var(--accent); }
+.band-switch input:checked + .switch-track::before { background: var(--button-text); transform: translateX(15px); }
+.band-switch input:focus-visible + .switch-track { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+[data-theme="winamp"] .hero h1 { font-size: clamp(40px, 5.25vw, 67px); line-height: 1.05; }
+[data-theme="winamp"] .hero h1 em { font-style: normal; }
+[data-theme="winamp"] .brand-mark, [data-theme="winamp"] .theme-picker select, [data-theme="winamp"] .console, [data-theme="winamp"] .tabs, [data-theme="winamp"] .tabs button, [data-theme="winamp"] .primary, [data-theme="winamp"] textarea { border-radius: 4px; }
+[data-theme="winamp"] .console { border-top: 3px solid #707a80; box-shadow: 0 16px 34px -18px var(--shadow), inset 1px 0 #6c777345; }
+[data-theme="winamp"] .tabs button[aria-selected="true"] { background: linear-gradient(180deg, #3c4845, #2a3431); box-shadow: inset 0 1px #9ca9a14a; }
+[data-theme="winamp"] .scope { border: 4px ridge #4a5557; border-radius: 4px; background: radial-gradient(ellipse, var(--scope-glow), var(--scope-haze) 66%); box-shadow: inset 0 0 20px #070c09; }
+[data-theme="winamp"] .scope-grid { background-image: repeating-linear-gradient(0deg, transparent 0 5px, #93c58e44 5px 6px), repeating-linear-gradient(90deg, transparent 0 20px, #93c58e44 20px 21px); background-size: auto; mask-image: none; }
+[data-theme="winamp"] .scope-orbit { display: none; }
+[data-theme="winamp"] .wave i { width: 5px; border-radius: 0; background: repeating-linear-gradient(to top, currentColor 0 4px, transparent 4px 6px); filter: drop-shadow(0 0 4px #8df96c55); }
+[data-theme="winamp"][data-band="ultrasonic"] .wave { color: #7ef0da; }
+[data-theme="winamp"][data-band="ultrasonic"] .scope { border-color: #577e74; }
+
+.page-footer { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; padding-block: 19px 25px; color: var(--muted); font-size: 12px; }
+.page-footer p { margin: 0; }
+.page-footer span { white-space: nowrap; font-weight: 650; }
+
+@media (max-width: 850px) {
+  .wrap { width: calc(100% - 56px); }
+  .hero { grid-template-columns: 1.12fr .88fr; min-height: 265px; padding-block: 30px 35px; }
+  .hero h1 { font-size: clamp(46px, 7.25vw, 65px); }
+  .scope { height: 209px; }
+  .console-main { padding-inline: 22px; }
+  .instructions { padding-inline: 20px; }
+  .console { grid-template-columns: minmax(0, 1fr) minmax(220px, .57fr); }
+}
+@media (max-width: 650px) {
+  .wrap { width: calc(100% - 32px); }
+  .page-header { min-height: 65px; }
+  .brand-mark { width: 36px; height: 36px; border-radius: 10px; }
+  .hero { grid-template-columns: 1fr; gap: 0; padding-block: 27px 16px; }
+  .hero h1 { font-size: clamp(42px, 11vw, 65px); }
+  [data-theme="winamp"] .hero h1 { font-size: clamp(33px, 8.4vw, 52px); }
+  .hero p { margin-top: 13px; font-size: 14px; }
+  .wide-only { display: none; }
+  .scope { height: 105px; margin-top: 6px; }
+  .orbit-outer { width: 157px; }
+  .orbit-middle { width: 115px; }
+  .orbit-inner { width: 71px; }
+  .wave { height: 67px; gap: 5px; }
+  .wave i { width: 2px; }
+  .console { grid-template-columns: minmax(0, 1fr); border-radius: 18px; }
+  .ultrasound-settings { align-items: start; flex-direction: column; padding: 12px 16px; }
+  .console-main { padding: 16px 16px 11px; }
+  .tabs { margin-bottom: 15px; }
+  .instructions { border-left: 0; border-top: 1px solid var(--line); padding: 19px 16px 21px; }
+  .instructions ol { margin-block: 17px; }
+  .page-footer { flex-wrap: wrap; padding-block: 14px 20px; }
+}
+@media (max-width: 460px) {
+  .header-actions { gap: 0; }
+  .header-link { display: none; }
+  .theme-picker { gap: 5px; }
+  .theme-picker select { max-width: 115px; }
+  .compose-head { gap: 6px; }
+  .format label { padding-inline: 7px; }
+  .image-fields { flex-wrap: wrap; }
+  .image-controls { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scope .wave i { animation: none !important; }
+  .primary, .switch-track::before { transition: none; }
+}
+
+  </style>
+</head>
+<body>
+  <header class="page-header wrap">
+    <a class="brand" href="#top" aria-label="Chirp by Globetrotta">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span><strong>Chirp</strong><small>by Globetrotta</small></span>
+    </a>
+    <nav class="header-actions" aria-label="Pagina e tema">
+      <a class="header-link" href="#come-funziona">Come funziona <span aria-hidden="true">↘</span></a>
+      <label class="theme-picker" for="theme-select">
+        <span class="theme-dot" aria-hidden="true"></span>
+        <span>Tema</span>
+        <select id="theme-select">
+          <option value="rust" selected>Terracotta</option>
+          <option value="blue">Blu pastello</option>
+          <option value="green">Verde salvia</option>
+          <option value="silver">Argento</option>
+          <option value="winamp">Winamp · rara</option>
+        </select>
+      </label>
+    </nav>
+  </header>
+
+  <main class="wrap" id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">I messaggi<br><em>prendono voce.</em></h1>
+        <p>Scambia testo, dati e immagini tra dispositivi vicini.<br class="wide-only"> Bastano un altoparlante e un microfono.</p>
+      </div>
+      <div class="scope" id="scope" data-state="idle" aria-hidden="true">
+        <div class="scope-grid"></div>
+        <div class="scope-axis"></div>
+        <div class="scope-orbit orbit-outer"></div>
+        <div class="scope-orbit orbit-middle"></div>
+        <div class="scope-orbit orbit-inner"></div>
+        <div class="wave">
+          <i style="--h:8%"></i><i style="--h:14%"></i><i style="--h:9%"></i><i style="--h:25%"></i>
+          <i style="--h:43%"></i><i style="--h:20%"></i><i style="--h:34%"></i><i style="--h:56%"></i>
+          <i style="--h:77%"></i><i style="--h:48%"></i><i style="--h:91%"></i><i style="--h:68%"></i>
+          <i style="--h:100%"></i><i style="--h:63%"></i><i style="--h:80%"></i><i style="--h:52%"></i>
+          <i style="--h:67%"></i><i style="--h:43%"></i><i style="--h:25%"></i><i style="--h:38%"></i>
+          <i style="--h:16%"></i><i style="--h:23%"></i><i style="--h:10%"></i><i style="--h:7%"></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="console" aria-label="Scambio di messaggi">
+      <section class="ultrasound-settings" id="ultrasound-settings" aria-labelledby="ultrasound-title" hidden>
+        <div>
+          <h2 id="ultrasound-title">Ultrasuoni <span>Sperimentale</span></h2>
+          <p id="ultrasound-help">Attivali su entrambi i dispositivi. La ricezione dipende dall’hardware. Il segnale può essere percepito da alcune persone e animali.</p>
+        </div>
+        <label class="band-switch" for="ultrasound-mode">
+          <input type="checkbox" id="ultrasound-mode" role="switch" aria-describedby="ultrasound-help">
+          <span class="switch-track" aria-hidden="true"></span>
+          <span>Usa ultrasuoni</span>
+        </label>
+      </section>
+      <div class="console-main">
+        <div class="tabs" role="tablist" aria-label="Modalità di scambio">
+          <button type="button" id="send-tab" role="tab" aria-controls="send-panel" aria-selected="true"><span class="tab-symbol" aria-hidden="true">↗</span> Invia</button>
+          <button type="button" id="receive-tab" role="tab" aria-controls="receive-panel" aria-selected="false" tabindex="-1"><span class="tab-symbol" aria-hidden="true">↙</span> Ricevi</button>
+        </div>
+
+        <div id="send-panel" role="tabpanel" aria-labelledby="send-tab">
+          <form id="send-form" autocomplete="off" novalidate>
+            <div class="compose-head">
+              <label for="message" id="message-label">Messaggio</label>
+              <fieldset class="format" aria-label="Formato del messaggio">
+                <input type="radio" name="format" value="text" id="mode-text" checked>
+                <label for="mode-text">Testo</label>
+                <input type="radio" name="format" value="json" id="mode-json">
+                <label for="mode-json">JSON</label>
+                <input type="radio" name="format" value="image" id="mode-image">
+                <label for="mode-image">Immagine</label>
+              </fieldset>
+            </div>
+            <div id="message-fields">
+              <textarea id="message" rows="3" aria-describedby="message-help byte-count" placeholder="Scrivi qualcosa…" spellcheck="false" autocapitalize="off"></textarea>
+              <div class="compose-foot">
+                <span id="message-help">Anche accenti ed emoji.</span>
+                <span id="byte-count">0 / 144 byte</span>
+              </div>
+            </div>
+            <div class="image-fields" id="image-fields" hidden>
+              <canvas id="image-preview" class="pixel-preview" width="24" height="24" role="img" aria-label="Anteprima della miniatura da inviare" hidden></canvas>
+              <div class="image-controls">
+                <input id="image-file" type="file" aria-label="Scegli un’immagine" aria-describedby="image-status" accept=".jpg,.jpeg,.png,.webp,.gif,.avif,image/jpeg,image/png,image/webp,image/gif,image/avif">
+                <p id="image-status" class="status" role="status">JPG, PNG, WebP, GIF o AVIF · max 10 MB.</p>
+                <button class="text-button" type="button" id="clear-image" hidden>Rimuovi immagine</button>
+              </div>
+            </div>
+            <div class="send-controls">
+              <div class="volume">
+                <div class="volume-label"><label for="volume">Volume</label><output id="volume-value" for="volume">16%</output></div>
+                <input id="volume" type="range" min="5" max="25" value="16" step="1">
+              </div>
+              <div class="send-action">
+                <span class="duration" id="duration"></span>
+                <button class="primary" type="submit" id="send-button" disabled><span class="button-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="send-button-label">Invia il chirp</span></button>
+              </div>
+            </div>
+            <p class="status" id="send-status" role="status" data-tone="neutral"></p>
+          </form>
+        </div>
+
+        <div id="receive-panel" role="tabpanel" aria-labelledby="receive-tab" hidden>
+          <div class="receive-intro">
+            <span class="mic-mark" aria-hidden="true"><i></i></span>
+            <h2>Ascolta un chirp</h2>
+            <p>Avvicina il dispositivo che invia e attiva il microfono su questo.</p>
+          </div>
+          <button class="primary" type="button" id="listen-button"><span class="button-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="listen-button-label">Attiva il microfono</span></button>
+          <p class="status" id="listen-status" role="status" data-tone="neutral"></p>
+          <div class="received" id="received-card" hidden>
+            <div class="received-head"><h3>Messaggio ricevuto <small id="received-kind"></small></h3><button type="button" id="clear-received">Cancella</button></div>
+            <pre id="received-message"></pre>
+            <canvas id="received-image" class="pixel-preview" width="24" height="24" role="img" aria-label="Miniatura dell’immagine ricevuta" hidden></canvas>
+          </div>
+        </div>
+      </div>
+
+      <aside class="instructions" id="come-funziona" aria-labelledby="instructions-title">
+        <h2 id="instructions-title">Come funziona</h2>
+        <p>Apri Chirp su due dispositivi vicini.</p>
+        <ol>
+          <li><span class="step-mark" aria-hidden="true">↙</span><div><strong>Attiva la ricezione</strong><p>Su un dispositivo, apri <b>Ricevi</b> e consenti l’uso del microfono.</p></div></li>
+          <li><span class="step-mark" aria-hidden="true">↗</span><div><strong>Invia un chirp</strong><p>Sull’altro, scrivi un messaggio o scegli un’immagine, poi premi <b>Invia il chirp</b>.</p></div></li>
+        </ol>
+        <p class="audio-note"><span class="note-dot" aria-hidden="true"></span><span id="band-note">Il segnale è udibile. Inizia a volume basso.</span></p>
+      </aside>
+    </section>
+    <footer class="page-footer"><p>Nessuna cronologia. I messaggi restano in memoria fino alla chiusura o al ricaricamento della pagina.</p><span>Chirp by Globetrotta</span></footer>
+    <noscript><p>Attiva JavaScript per inviare e ricevere messaggi via audio.</p></noscript>
+  </main>
+  <script type="module">
+export const MAX_PAYLOAD_BYTES = 144;
+export const MAX_BINARY_BYTES = 255;
+export const ULTRASONIC_MAX_VOLUME = 0.05;
+
+const COMMON_FORMAT = {
+  maxPayloadBytes: MAX_PAYLOAD_BYTES,
+  maxBinaryBytes: MAX_BINARY_BYTES,
+  lead: [0, 0, 0],
+  kinds: ['text', 'json', 'binary'],
+  version: 0x10,
+  silenceSeconds: 0.08,
+};
+
+const FORMATS = {
+  audible: {
+    ...COMMON_FORMAT,
+    frequencies: [1200, 1380, 1560, 1740, 1920, 2100, 2280, 2460],
+    sync: [7, 2, 6, 3, 1, 5, 0, 4, 2, 5, 1, 6, 4, 0, 3, 2],
+    bitsPerSymbol: 3,
+    symbolSeconds: 0.024,
+    defaultVolume: 0.16,
+    maxVolume: 0.25,
+  },
+  ultrasonic: {
+    ...COMMON_FORMAT,
+    frequencies: [20200, 20440, 20680, 20920],
+    sync: [3, 0, 1, 2, 0, 2, 1, 2, 1, 0, 2, 0, 1, 2, 0, 1, 0, 2, 1, 0],
+    bitsPerSymbol: 2,
+    symbolSeconds: 0.016,
+    minimumSampleRate: 44100,
+    suppressLowFrequencies: true,
+    defaultVolume: 0.032,
+    maxVolume: ULTRASONIC_MAX_VOLUME,
+  },
+};
+
+function getFormat(band) {
+  if (!Object.hasOwn(FORMATS, band)) throw new RangeError('Banda audio non valida.');
+  return FORMATS[band];
+}
+
+function assertSampleRate(format, sampleRate) {
+  if (format.minimumSampleRate && sampleRate < format.minimumSampleRate) {
+    throw new DOMException('Gli ultrasuoni richiedono un campionamento audio di almeno 44,1 kHz.', 'NotSupportedError');
+  }
+}
+
+function durationForFormat(byteLength, format) {
+  const symbolCount = format.lead.length + format.sync.length + Math.ceil((byteLength + 4) * 8 / format.bitsPerSymbol);
+  return format.silenceSeconds * 2 + symbolCount * format.symbolSeconds;
+}
+
+export function estimateDuration(byteLength, band = 'audible') {
+  return durationForFormat(byteLength, getFormat(band));
+}
+
+function crc16(bytes, length) {
+  let crc = 0xffff;
+  for (let index = 0; index < length; index += 1) {
+    crc ^= bytes[index] << 8;
+    for (let bit = 0; bit < 8; bit += 1) {
+      crc = ((crc << 1) ^ (crc & 0x8000 ? 0x1021 : 0)) & 0xffff;
+    }
+  }
+  return crc;
+}
+
+export function renderPacket({ kind, bytes, volume, band = 'audible' }, sampleRate) {
+  const format = getFormat(band);
+  assertSampleRate(format, sampleRate);
+  const kindIndex = format.kinds.indexOf(kind);
+  const maxBytes = kind === 'binary' ? format.maxBinaryBytes : format.maxPayloadBytes;
+  if (kindIndex < 0 || !(bytes instanceof Uint8Array) || bytes.length === 0 || bytes.length > maxBytes) {
+    throw new RangeError(`Serve un messaggio da 1 a ${maxBytes} byte con un formato valido.`);
+  }
+  const amplitude = volume === undefined ? format.defaultVolume : volume;
+  if (!Number.isFinite(amplitude) || amplitude < 0 || amplitude > format.maxVolume) {
+    throw new RangeError('Volume audio fuori intervallo.');
+  }
+
+  const frame = new Uint8Array(bytes.length + 4);
+  frame[0] = format.version | kindIndex;
+  frame[1] = bytes.length;
+  frame.set(bytes, 2);
+  const crc = crc16(frame, frame.length - 2);
+  frame[frame.length - 2] = crc >>> 8;
+  frame[frame.length - 1] = crc & 0xff;
+
+  const symbols = [...format.lead, ...format.sync];
+  const symbolMask = (1 << format.bitsPerSymbol) - 1;
+  let pending = 0;
+  let bitCount = 0;
+  for (const byte of frame) {
+    pending = (pending << 8) | byte;
+    bitCount += 8;
+    while (bitCount >= format.bitsPerSymbol) {
+      bitCount -= format.bitsPerSymbol;
+      symbols.push((pending >>> bitCount) & symbolMask);
+    }
+    pending &= (1 << bitCount) - 1;
+  }
+  if (bitCount) symbols.push(pending << (format.bitsPerSymbol - bitCount));
+
+  const samples = new Float32Array(Math.ceil(durationForFormat(bytes.length, format) * sampleRate));
+  const ramp = Math.max(1, Math.round(sampleRate * 0.0018));
+  const padding = format.silenceSeconds * sampleRate;
+  const symbolSamples = format.symbolSeconds * sampleRate;
+
+  for (let index = 0; index < symbols.length; index += 1) {
+    const start = Math.round(padding + index * symbolSamples);
+    const stop = Math.round(padding + (index + 1) * symbolSamples);
+    const radians = 2 * Math.PI * format.frequencies[symbols[index]] / sampleRate;
+    for (let sample = start; sample < stop; sample += 1) {
+      const edge = Math.min(sample - start, stop - 1 - sample, ramp);
+      const envelope = (1 - Math.cos(Math.PI * edge / ramp)) / 2;
+      samples[sample] = Math.sin(radians * (sample - start)) * envelope * amplitude;
+    }
+  }
+  return samples;
+}
+
+// This function also runs in an AudioWorklet. All dependencies arrive as arguments.
+function createDecoder(sampleRate, onPacket, format, checksum) {
+  // Averaging during downsampling would attenuate the ultrasonic tones.
+  const suppressLowFrequencies = format.suppressLowFrequencies;
+  const decimation = suppressLowFrequencies ? 1 : Math.max(1, Math.floor(sampleRate / 12000));
+  const analysisRate = sampleRate / decimation;
+  const phaseCount = 8;
+  const symbolSamples = format.symbolSeconds * analysisRate;
+  const windowSize = Math.round(symbolSamples * 0.55);
+  const hop = symbolSamples / phaseCount;
+  const coefficients = format.frequencies.map((frequency) => 2 * Math.cos(2 * Math.PI * frequency / analysisRate));
+  const samples = new Float32Array(windowSize * 2);
+  const tracks = Array.from({ length: phaseCount }, () => ({ bytes: new Uint8Array(format.maxBinaryBytes + 4) }));
+  let inputCount;
+  let inputSum;
+  let previousInput;
+  let previousDifference;
+  let writeIndex;
+  let sampleCount;
+  let nextAnalysis;
+  let phase;
+
+  function resetTrack(track) {
+    track.syncIndex = 0;
+    track.receiving = false;
+    track.length = 0;
+    track.targetLength = 0;
+    track.bitCount = 0;
+    track.pending = 0;
+  }
+
+  function reset() {
+    tracks.forEach(resetTrack);
+    inputCount = 0;
+    inputSum = 0;
+    previousInput = 0;
+    previousDifference = 0;
+    writeIndex = 0;
+    sampleCount = 0;
+    nextAnalysis = windowSize;
+    phase = 0;
+  }
+
+  function classify() {
+    const end = writeIndex + windowSize;
+    let energy = 0;
+    for (let index = writeIndex; index < end; index += 1) {
+      energy += samples[index] * samples[index];
+    }
+    if (energy < windowSize * 0.00065 ** 2) return -1;
+
+    let bestPower = 0;
+    let nextPower = 0;
+    let bestTone = -1;
+    for (let tone = 0; tone < coefficients.length; tone += 1) {
+      const coefficient = coefficients[tone];
+      let previous = 0;
+      let older = 0;
+      for (let index = writeIndex; index < end; index += 1) {
+        const current = samples[index] + coefficient * previous - older;
+        older = previous;
+        previous = current;
+      }
+      const power = previous * previous + older * older - coefficient * previous * older;
+      if (power > bestPower) {
+        nextPower = bestPower;
+        bestPower = power;
+        bestTone = tone;
+      } else if (power > nextPower) {
+        nextPower = power;
+      }
+    }
+    if (bestPower < nextPower * 2.3 || bestPower < energy * windowSize * 0.18) return -1;
+    return bestTone;
+  }
+
+  function takeTone(track, tone) {
+    if (!track.receiving) {
+      if (tone === format.sync[track.syncIndex]) track.syncIndex += 1;
+      // The first tone appears only once in the sync word.
+      else track.syncIndex = tone === format.sync[0] ? 1 : 0;
+      track.receiving = track.syncIndex === format.sync.length;
+      return;
+    }
+
+    if (tone < 0) {
+      resetTrack(track);
+      return;
+    }
+    track.pending = (track.pending << format.bitsPerSymbol) | tone;
+    track.bitCount += format.bitsPerSymbol;
+    if (track.bitCount < 8) return;
+
+    track.bitCount -= 8;
+    track.bytes[track.length] = track.pending >>> track.bitCount;
+    track.pending &= (1 << track.bitCount) - 1;
+    track.length += 1;
+
+    const kindIndex = track.bytes[0] & 0x0f;
+    if ((track.bytes[0] & 0xf0) !== format.version || kindIndex >= format.kinds.length) {
+      resetTrack(track);
+      return;
+    }
+    if (track.length === 2) {
+      const byteLength = track.bytes[1];
+      const maxBytes = format.kinds[kindIndex] === 'binary' ? format.maxBinaryBytes : format.maxPayloadBytes;
+      if (byteLength === 0 || byteLength > maxBytes) {
+        resetTrack(track);
+        return;
+      }
+      track.targetLength = byteLength + 4;
+    }
+    if (track.length !== track.targetLength) return;
+
+    const crcIndex = track.length - 2;
+    const expectedCrc = (track.bytes[crcIndex] << 8) | track.bytes[crcIndex + 1];
+    if (checksum(track.bytes, crcIndex) !== expectedCrc) {
+      resetTrack(track);
+      return;
+    }
+    const bytes = track.bytes.slice(2, crcIndex);
+    // Overlapping sampling phases may receive the same frame. Deliver it once.
+    tracks.forEach(resetTrack);
+    onPacket({ kind: format.kinds[kindIndex], bytes });
+  }
+
+  function process(input) {
+    for (let index = 0; index < input.length; index += 1) {
+      inputCount += 1;
+      inputSum += input[index];
+      if (inputCount < decimation) continue;
+
+      let sample = inputSum / decimation;
+      inputCount = 0;
+      inputSum = 0;
+      if (suppressLowFrequencies) {
+        const difference = sample - previousInput;
+        previousInput = sample;
+        // Two first differences reduce audible background energy.
+        sample = (difference - previousDifference) * 0.25;
+        previousDifference = difference;
+      }
+      samples[writeIndex] = sample;
+      samples[writeIndex + windowSize] = sample;
+      writeIndex = (writeIndex + 1) % windowSize;
+      sampleCount += 1;
+      if (sampleCount < nextAnalysis) continue;
+
+      takeTone(tracks[phase], classify());
+      phase = (phase + 1) % phaseCount;
+      nextAnalysis += hop;
+    }
+  }
+
+  reset();
+  return { process, reset };
+}
+
+export function createPacketDecoder(sampleRate, onPacket, band = 'audible') {
+  const format = getFormat(band);
+  assertSampleRate(format, sampleRate);
+  return createDecoder(sampleRate, onPacket, format, crc16);
+}
+
+const PROCESSOR_NAME = 'globetrotta-chirp-receiver';
+
+async function addReceiverModule(context) {
+  const source = `
+    const makeDecoder = ${createDecoder.toString()};
+    const checksum = ${crc16.toString()};
+    const formats = ${JSON.stringify(FORMATS)};
+    class ChirpReceiver extends AudioWorkletProcessor {
+      constructor({ processorOptions }) {
+        super();
+        this.muted = false;
+        this.decoder = makeDecoder(sampleRate, (packet) => {
+          this.port.postMessage(packet, [packet.bytes.buffer]);
+        }, formats[processorOptions.band], checksum);
+        this.port.onmessage = ({ data }) => {
+          this.muted = data.muted;
+          this.decoder.reset();
+        };
+      }
+      process(inputs) {
+        const channel = inputs[0]?.[0];
+        if (!this.muted && channel) this.decoder.process(channel);
+        return true;
+      }
+    }
+    registerProcessor(${JSON.stringify(PROCESSOR_NAME)}, ChirpReceiver);
+  `;
+  const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }));
+  try {
+    await context.audioWorklet.addModule(url);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function makeFallbackReceiver(context, onPacket, band) {
+  const node = context.createScriptProcessor(1024, 1, 1);
+  const decoder = createPacketDecoder(context.sampleRate, onPacket, band);
+  let muted = false;
+  node.onaudioprocess = ({ inputBuffer, outputBuffer }) => {
+    outputBuffer.getChannelData(0).fill(0);
+    if (!muted) decoder.process(inputBuffer.getChannelData(0));
+  };
+  return {
+    node,
+    setMuted(value) {
+      muted = value;
+      decoder.reset();
+    },
+    close() {
+      node.onaudioprocess = null;
+      node.disconnect();
+      decoder.reset();
+    },
+  };
+}
+
+function abortError() {
+  return new DOMException('Operazione annullata.', 'AbortError');
+}
+
+export class AcousticModem {
+  #context;
+  #module;
+  #listener;
+  #playback;
+
+  #audioContext() {
+    const AudioContextType = globalThis.AudioContext ?? globalThis.webkitAudioContext;
+    if (!AudioContextType) throw new Error('Il browser non supporta Web Audio.');
+    this.#context ??= new AudioContextType();
+    return this.#context;
+  }
+
+  async #makeReceiver(context, onPacket, onEnded, band) {
+    if (context.audioWorklet && globalThis.AudioWorkletNode) {
+      try {
+        this.#module ??= addReceiverModule(context);
+        await this.#module;
+        const node = new AudioWorkletNode(context, PROCESSOR_NAME, {
+          numberOfInputs: 1,
+          numberOfOutputs: 1,
+          outputChannelCount: [1],
+          processorOptions: { band },
+        });
+        node.port.onmessage = ({ data }) => onPacket(data);
+        node.onprocessorerror = onEnded;
+        return {
+          node,
+          setMuted: (muted) => node.port.postMessage({ muted }),
+          close() {
+            node.port.onmessage = null;
+            node.onprocessorerror = null;
+            node.port.close();
+            node.disconnect();
+          },
+        };
+      } catch (error) {
+        if (!context.createScriptProcessor) throw error;
+      }
+    }
+    return makeFallbackReceiver(context, onPacket, band);
+  }
+
+  async startListening(onPacket, onEnded, band = 'audible') {
+    if (this.#listener) return;
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('Il microfono richiede una pagina HTTPS o localhost.');
+    }
+
+    const context = this.#audioContext();
+    const format = getFormat(band);
+    assertSampleRate(format, context.sampleRate);
+    const listener = {};
+    this.#listener = listener;
+    const endListener = () => {
+      if (this.#listener !== listener) return;
+      this.stopListening();
+      onEnded?.();
+    };
+    try {
+      const mic = navigator.mediaDevices.getUserMedia({
+        audio: { channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+      });
+      const streamReady = mic.then((stream) => {
+        if (this.#listener !== listener) {
+          stream.getTracks().forEach((track) => track.stop());
+          throw abortError();
+        }
+        listener.stream = stream;
+        return stream;
+      });
+      const [stream] = await Promise.all([streamReady, context.resume()]);
+      const track = stream.getAudioTracks()[0];
+      if (!track || track.readyState === 'ended') throw new Error('Il microfono non è più disponibile.');
+      assertSampleRate(format, track.getSettings?.().sampleRate);
+      listener.receiver = await this.#makeReceiver(context, (packet) => {
+        if (this.#listener === listener && !this.#playback) onPacket(packet);
+      }, endListener, band);
+      if (this.#listener !== listener) {
+        listener.receiver.close();
+        throw abortError();
+      }
+
+      if (track.readyState === 'ended') throw new Error('Il microfono non è più disponibile.');
+      track.addEventListener('ended', endListener, { once: true });
+
+      listener.source = context.createMediaStreamSource(stream);
+      listener.silence = context.createGain();
+      listener.silence.gain.value = 0;
+      listener.receiver.setMuted(Boolean(this.#playback));
+      listener.source.connect(listener.receiver.node);
+      listener.receiver.node.connect(listener.silence);
+      listener.silence.connect(context.destination);
+    } catch (error) {
+      if (this.#listener === listener) this.stopListening();
+      throw error;
+    }
+  }
+
+  stopListening() {
+    const listener = this.#listener;
+    if (!listener) return;
+    this.#listener = undefined;
+    listener.stream?.getTracks().forEach((track) => track.stop());
+    listener.source?.disconnect();
+    listener.receiver?.close();
+    listener.silence?.disconnect();
+  }
+
+  async send(packet) {
+    if (this.#playback) throw new Error('Una trasmissione è già in corso.');
+    const context = this.#audioContext();
+    const playback = {};
+    this.#playback = playback;
+    this.#listener?.receiver?.setMuted(true);
+    try {
+      await context.resume();
+      if (playback.canceled) throw abortError();
+      const samples = renderPacket(packet, context.sampleRate);
+      const buffer = context.createBuffer(1, samples.length, context.sampleRate);
+      buffer.getChannelData(0).set(samples);
+
+      const source = context.createBufferSource();
+      playback.source = source;
+      source.buffer = buffer;
+      source.connect(context.destination);
+      await new Promise((resolve, reject) => {
+        playback.reject = reject;
+        source.onended = resolve;
+        source.start();
+      });
+      if (playback.canceled) throw abortError();
+    } finally {
+      if (playback.source) {
+        playback.source.onended = null;
+        playback.source.disconnect();
+      }
+      if (this.#playback === playback) {
+        this.#playback = undefined;
+        this.#listener?.receiver?.setMuted(false);
+      }
+    }
+  }
+
+  cancelSend() {
+    if (!this.#playback || this.#playback.canceled) return;
+    this.#playback.canceled = true;
+    this.#playback.reject?.(abortError());
+    this.#playback.source?.stop();
+  }
+
+  async dispose() {
+    this.stopListening();
+    this.cancelSend();
+    this.#playback = undefined;
+    const context = this.#context;
+    this.#context = undefined;
+    this.#module = undefined;
+    if (context && context.state !== 'closed') await context.close();
+  }
+}
+
+export const CHIRP_IMAGE_SIZE = 24;
+export const CHIRP_MAX_IMAGE_FILE_BYTES = 10 * 1024 * 1024;
+
+const CHIRP_IMAGE_SIGNATURE = 0xc1;
+const CHIRP_IMAGE_COLORS = 8;
+const CHIRP_IMAGE_DATA_OFFSET = 1 + CHIRP_IMAGE_COLORS * 3;
+const CHIRP_IMAGE_PIXEL_COUNT = CHIRP_IMAGE_SIZE ** 2;
+export const CHIRP_IMAGE_BYTES = CHIRP_IMAGE_DATA_OFFSET + CHIRP_IMAGE_PIXEL_COUNT * 3 / 8;
+
+async function chirpRasterType(file) {
+  const header = new Uint8Array(await file.slice(0, 128).arrayBuffer());
+  const matches = (...prefix) => prefix.every((byte, index) => header[index] === byte);
+  const ascii = (offset, length) => String.fromCharCode(...header.subarray(offset, offset + length));
+
+  if (matches(0xff, 0xd8, 0xff)) return 'image/jpeg';
+  if (matches(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return 'image/png';
+  if (ascii(0, 4) === 'RIFF' && ascii(8, 4) === 'WEBP') return 'image/webp';
+  if (['GIF87a', 'GIF89a'].includes(ascii(0, 6))) return 'image/gif';
+
+  if (header.length >= 16 && ascii(4, 4) === 'ftyp') {
+    const boxLength = new DataView(header.buffer).getUint32(0);
+    for (let offset = 8; offset + 4 <= Math.min(boxLength, header.length); offset += 4) {
+      if (offset !== 12 && ['avif', 'avis'].includes(ascii(offset, 4))) return 'image/avif';
+    }
+  }
+  throw new Error('Scegli un’immagine JPG, PNG, WebP, GIF o AVIF.');
+}
+
+async function loadChirpRaster(blob) {
+  if (typeof createImageBitmap === 'function') {
+    try {
+      return await createImageBitmap(blob);
+    } catch {
+      // The HTML image decoder may support formats that createImageBitmap cannot open.
+    }
+  }
+
+  const url = URL.createObjectURL(blob);
+  try {
+    return await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error('Impossibile leggere questa immagine.'));
+      image.src = url;
+    });
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function chirpColorHistogram(rgba) {
+  const histogram = new Map();
+  for (let index = 0; index < rgba.length; index += 4) {
+    const red = rgba[index];
+    const green = rgba[index + 1];
+    const blue = rgba[index + 2];
+    const key = (red << 16) | (green << 8) | blue;
+    const color = histogram.get(key);
+    if (color) color.count++;
+    else histogram.set(key, { rgb: [red, green, blue], count: 1 });
+  }
+  return [...histogram.values()];
+}
+
+function chirpColorGroup(colors) {
+  const min = [255, 255, 255];
+  const max = [0, 0, 0];
+  let count = 0;
+  for (const color of colors) {
+    count += color.count;
+    for (let channel = 0; channel < 3; channel++) {
+      min[channel] = Math.min(min[channel], color.rgb[channel]);
+      max[channel] = Math.max(max[channel], color.rgb[channel]);
+    }
+  }
+  const spread = max.map((value, channel) => value - min[channel]);
+  const largestSpread = Math.max(...spread);
+  return { colors, count, axis: spread.indexOf(largestSpread), score: largestSpread * Math.sqrt(count) };
+}
+
+function chirpPalette(rgba) {
+  const groups = [chirpColorGroup(chirpColorHistogram(rgba))];
+  while (groups.length < CHIRP_IMAGE_COLORS) {
+    groups.sort((left, right) => right.score - left.score);
+    const { colors, axis, count, score } = groups[0];
+    if (score === 0) break;
+
+    colors.sort((left, right) => left.rgb[axis] - right.rgb[axis]);
+    let split = 1;
+    let leftCount = colors[0].count;
+    while (leftCount < count / 2 && split < colors.length - 1) {
+      leftCount += colors[split].count;
+      split++;
+    }
+    groups.splice(0, 1, chirpColorGroup(colors.slice(0, split)), chirpColorGroup(colors.slice(split)));
+  }
+
+  const palette = groups.map(({ colors, count }) => {
+    const sum = [0, 0, 0];
+    for (const color of colors) {
+      for (let channel = 0; channel < 3; channel++) sum[channel] += color.rgb[channel] * color.count;
+    }
+    return sum.map(value => Math.round(value / count));
+  });
+  while (palette.length < CHIRP_IMAGE_COLORS) palette.push(palette[0]);
+  return palette;
+}
+
+function nearestChirpColor(palette, red, green, blue) {
+  let nearest = 0;
+  let distance = Infinity;
+  for (const [index, [r, g, b]] of palette.entries()) {
+    const difference = 2 * (r - red) ** 2 + 4 * (g - green) ** 2 + 3 * (b - blue) ** 2;
+    if (difference < distance) {
+      nearest = index;
+      distance = difference;
+    }
+  }
+  return nearest;
+}
+
+function packChirpImage(rgba) {
+  const palette = chirpPalette(rgba);
+  const bytes = new Uint8Array(CHIRP_IMAGE_BYTES);
+  bytes[0] = CHIRP_IMAGE_SIGNATURE;
+  for (const [index, rgb] of palette.entries()) bytes.set(rgb, 1 + index * 3);
+
+  let offset = CHIRP_IMAGE_DATA_OFFSET;
+  let pending = 0;
+  let pendingBits = 0;
+  for (let index = 0; index < rgba.length; index += 4) {
+    pending = (pending << 3) | nearestChirpColor(palette, rgba[index], rgba[index + 1], rgba[index + 2]);
+    pendingBits += 3;
+    if (pendingBits >= 8) {
+      pendingBits -= 8;
+      bytes[offset++] = pending >> pendingBits;
+      pending &= (1 << pendingBits) - 1;
+    }
+  }
+  return bytes;
+}
+
+export async function encodeChirpImage(file) {
+  if (!(file instanceof Blob) || file.size === 0) throw new Error('Scegli un file immagine.');
+  if (file.size > CHIRP_MAX_IMAGE_FILE_BYTES) throw new Error('L’immagine deve pesare al massimo 10 MB.');
+
+  const mime = await chirpRasterType(file);
+  const source = await loadChirpRaster(file.slice(0, file.size, mime));
+  try {
+    const width = source.naturalWidth ?? source.width;
+    const height = source.naturalHeight ?? source.height;
+    if (!width || !height) throw new Error('L’immagine non ha dimensioni valide.');
+
+    const canvas = document.createElement('canvas');
+    canvas.width = CHIRP_IMAGE_SIZE;
+    canvas.height = CHIRP_IMAGE_SIZE;
+    const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
+    if (!context) throw new Error('Questo browser non riesce a preparare l’immagine.');
+
+    const scale = CHIRP_IMAGE_SIZE / Math.max(width, height);
+    const fitWidth = Math.max(1, Math.round(width * scale));
+    const fitHeight = Math.max(1, Math.round(height * scale));
+    context.fillStyle = '#faf7f1';
+    context.fillRect(0, 0, CHIRP_IMAGE_SIZE, CHIRP_IMAGE_SIZE);
+    context.imageSmoothingQuality = 'high';
+    context.drawImage(source, Math.floor((CHIRP_IMAGE_SIZE - fitWidth) / 2), Math.floor((CHIRP_IMAGE_SIZE - fitHeight) / 2), fitWidth, fitHeight);
+    return packChirpImage(context.getImageData(0, 0, CHIRP_IMAGE_SIZE, CHIRP_IMAGE_SIZE).data);
+  } finally {
+    source.close?.();
+  }
+}
+
+export function isChirpImage(bytes) {
+  return bytes instanceof Uint8Array && bytes.length === CHIRP_IMAGE_BYTES && bytes[0] === CHIRP_IMAGE_SIGNATURE;
+}
+
+export function drawChirpImage(canvas, bytes) {
+  if (!isChirpImage(bytes)) throw new Error('Il chirp non contiene un’immagine valida.');
+
+  canvas.width = CHIRP_IMAGE_SIZE;
+  canvas.height = CHIRP_IMAGE_SIZE;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('Questo browser non riesce a mostrare l’immagine.');
+
+  const image = context.createImageData(CHIRP_IMAGE_SIZE, CHIRP_IMAGE_SIZE);
+  let offset = CHIRP_IMAGE_DATA_OFFSET;
+  let pending = 0;
+  let pendingBits = 0;
+  for (let index = 0; index < image.data.length; index += 4) {
+    if (pendingBits < 3) {
+      pending = (pending << 8) | bytes[offset++];
+      pendingBits += 8;
+    }
+    pendingBits -= 3;
+    const colorOffset = 1 + ((pending >> pendingBits) & 7) * 3;
+    image.data[index] = bytes[colorOffset];
+    image.data[index + 1] = bytes[colorOffset + 1];
+    image.data[index + 2] = bytes[colorOffset + 2];
+    image.data[index + 3] = 255;
+    pending &= (1 << pendingBits) - 1;
+  }
+  context.putImageData(image, 0, 0);
+}
+
+const chirpElement = id => document.getElementById(id);
+const sendTab = chirpElement('send-tab');
+const receiveTab = chirpElement('receive-tab');
+const sendPanel = chirpElement('send-panel');
+const receivePanel = chirpElement('receive-panel');
+const themeSelect = chirpElement('theme-select');
+const ultrasoundSettings = chirpElement('ultrasound-settings');
+const ultrasoundMode = chirpElement('ultrasound-mode');
+const bandNote = chirpElement('band-note');
+const sendForm = chirpElement('send-form');
+const messageInput = chirpElement('message');
+const messageLabel = chirpElement('message-label');
+const messageHelp = chirpElement('message-help');
+const messageFields = chirpElement('message-fields');
+const textMode = chirpElement('mode-text');
+const jsonMode = chirpElement('mode-json');
+const imageMode = chirpElement('mode-image');
+const imageFields = chirpElement('image-fields');
+const imageFile = chirpElement('image-file');
+const imagePreview = chirpElement('image-preview');
+const imageStatus = chirpElement('image-status');
+const clearImage = chirpElement('clear-image');
+const byteCount = chirpElement('byte-count');
+const duration = chirpElement('duration');
+const volumeInput = chirpElement('volume');
+const volumeValue = chirpElement('volume-value');
+const sendButton = chirpElement('send-button');
+const sendButtonLabel = chirpElement('send-button-label');
+const sendStatus = chirpElement('send-status');
+const listenButton = chirpElement('listen-button');
+const listenButtonLabel = chirpElement('listen-button-label');
+const listenStatus = chirpElement('listen-status');
+const receivedCard = chirpElement('received-card');
+const receivedKind = chirpElement('received-kind');
+const receivedMessage = chirpElement('received-message');
+const receivedImage = chirpElement('received-image');
+const clearReceived = chirpElement('clear-received');
+const scope = chirpElement('scope');
+
+const messageEncoder = new TextEncoder();
+const messageDecoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
+const secondsFormat = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 1 });
+const imageHint = 'JPG, PNG, WebP, GIF o AVIF · max 10 MB.';
+const audibleVolumeRange = { min: volumeInput.min, max: volumeInput.max };
+const savedVolume = { audible: volumeInput.value, ultrasonic: '3' };
+
+let chirpModem;
+let selectedTab = sendTab;
+let audioBand = 'audible';
+let imageBytes = null;
+let imageRequest = null;
+let sendRequest = null;
+let listenRequest = null;
+let listening = false;
+let receivedFlash;
+
+function getChirpModem() {
+  chirpModem ??= new AcousticModem();
+  return chirpModem;
+}
+
+function setStatus(element, message, tone = 'neutral') {
+  element.textContent = message;
+  element.dataset.tone = tone;
+}
+
+function showScopeState() {
+  scope.dataset.state = sendRequest ? 'sending' : listening ? 'listening' : 'idle';
+}
+
+function inspectMessage() {
+  if (imageMode.checked) return { kind: 'binary', bytes: imageBytes, valid: imageBytes !== null };
+
+  const kind = jsonMode.checked ? 'json' : 'text';
+  const value = messageInput.value;
+  const bytes = messageEncoder.encode(value);
+  let error = '';
+
+  if (bytes.length > MAX_PAYLOAD_BYTES) {
+    error = `Riduci il messaggio di ${bytes.length - MAX_PAYLOAD_BYTES} B per poterlo inviare.`;
+  } else if (kind === 'json' && value.trim()) {
+    try {
+      JSON.parse(value);
+    } catch {
+      error = 'Controlla la sintassi JSON.';
+    }
+  }
+
+  return { kind, bytes, error, valid: Boolean(value.trim()) && !error };
+}
+
+function updateComposer() {
+  const packet = inspectMessage();
+  const isImage = packet.kind === 'binary';
+  messageLabel.hidden = isImage;
+  messageFields.hidden = isImage;
+  imageFields.hidden = !isImage;
+
+  if (!isImage) {
+    const isJson = packet.kind === 'json';
+    byteCount.textContent = `${packet.bytes.length} / ${MAX_PAYLOAD_BYTES} byte`;
+    byteCount.dataset.tone = packet.bytes.length > MAX_PAYLOAD_BYTES ? 'error' : 'neutral';
+    messageInput.setAttribute('aria-invalid', String(Boolean(packet.error)));
+    messageLabel.textContent = isJson ? 'Dati JSON' : 'Messaggio';
+    messageInput.placeholder = isJson ? '{"viaggio":"Roma"}' : 'Scrivi il tuo messaggio…';
+    messageInput.spellcheck = !isJson;
+    setStatus(messageHelp, packet.error || (isJson ? 'Anche spazi e a capo contano nel limite.' : 'Accenti ed emoji possono occupare più di un byte.'), packet.error ? 'error' : 'neutral');
+  }
+
+  duration.textContent = packet.valid ? `${secondsFormat.format(estimateDuration(packet.bytes.length, audioBand))} s` : '—';
+  sendButton.disabled = !packet.valid && !sendRequest;
+}
+
+function syncVolume() {
+  savedVolume[audioBand] = volumeInput.value;
+  volumeValue.textContent = `${volumeInput.value}%`;
+  volumeInput.setAttribute('aria-valuetext', `${volumeInput.value} per cento`);
+  const percent = (Number(volumeInput.value) - Number(volumeInput.min)) / (Number(volumeInput.max) - Number(volumeInput.min));
+  volumeInput.style.setProperty('--volume-fill', `${100 * percent}%`);
+}
+
+function applyTheme() {
+  const theme = themeSelect.value;
+  const isWinamp = theme === 'winamp';
+  document.documentElement.dataset.theme = theme;
+  ultrasoundSettings.hidden = !isWinamp;
+  if (!isWinamp) ultrasoundMode.checked = false;
+
+  const nextBand = ultrasoundMode.checked ? 'ultrasonic' : 'audible';
+  if (nextBand !== audioBand) {
+    stopChirpSend('Trasmissione interrotta. La modalità audio è cambiata.');
+    stopChirpListen('Modalità audio cambiata. Riattiva il microfono per ricevere.');
+  }
+
+  audioBand = nextBand;
+  document.documentElement.dataset.band = audioBand;
+  bandNote.textContent = audioBand === 'ultrasonic'
+    ? 'Ultrasuoni attivi. Se la ricezione fallisce, passa ai toni udibili su entrambi.'
+    : 'Il segnale è udibile. Inizia a volume basso.';
+  volumeInput.min = audioBand === 'ultrasonic' ? '1' : audibleVolumeRange.min;
+  volumeInput.max = audioBand === 'ultrasonic' ? String(100 * ULTRASONIC_MAX_VOLUME) : audibleVolumeRange.max;
+  volumeInput.value = savedVolume[audioBand];
+  syncVolume();
+  updateComposer();
+}
+
+function renderSendControls() {
+  const sending = Boolean(sendRequest);
+  sendButtonLabel.textContent = sending ? 'Interrompi invio' : 'Invia il chirp';
+  messageInput.readOnly = sending;
+  textMode.disabled = sending;
+  jsonMode.disabled = sending;
+  imageMode.disabled = sending;
+  imageFile.disabled = sending;
+  clearImage.disabled = sending;
+  volumeInput.disabled = sending;
+  updateComposer();
+  showScopeState();
+}
+
+function renderListenControls() {
+  listenButtonLabel.textContent = listening ? 'Interrompi ascolto' : listenRequest ? 'Annulla richiesta' : 'Attiva il microfono';
+  showScopeState();
+}
+
+function stopChirpSend(status = 'Trasmissione interrotta.') {
+  if (!sendRequest) return;
+  sendRequest = null;
+  chirpModem?.cancelSend();
+  renderSendControls();
+  setStatus(sendStatus, status);
+}
+
+function stopChirpListen(status = 'Microfono disattivato.') {
+  if (!listenRequest) return;
+  listenRequest = null;
+  listening = false;
+  clearTimeout(receivedFlash);
+  chirpModem?.stopListening();
+  renderListenControls();
+  setStatus(listenStatus, status);
+}
+
+function setActiveChirpTab(tab, moveFocus = false) {
+  if (tab !== selectedTab) {
+    stopChirpSend();
+    stopChirpListen();
+    selectedTab = tab;
+  }
+
+  const isSend = tab === sendTab;
+  sendTab.setAttribute('aria-selected', String(isSend));
+  receiveTab.setAttribute('aria-selected', String(!isSend));
+  sendTab.tabIndex = isSend ? 0 : -1;
+  receiveTab.tabIndex = isSend ? -1 : 0;
+  sendPanel.hidden = !isSend;
+  receivePanel.hidden = isSend;
+  if (moveFocus) tab.focus();
+}
+
+function audioIssue(error, action, band) {
+  if (!(globalThis.AudioContext ?? globalThis.webkitAudioContext)) return 'Questo browser non supporta la riproduzione e l’ascolto dei chirp.';
+  if (!window.isSecureContext) return 'Per usare l’audio, apri la pagina via HTTPS o su localhost.';
+  if (band === 'ultrasonic' && error?.name === 'NotSupportedError') return error.message;
+  if (action === 'send') return 'Riproduzione non riuscita. Verifica l’uscita audio e riprova.';
+  if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
+    return 'Consenti l’accesso al microfono nelle impostazioni del browser, poi riprova.';
+  }
+  if (error?.name === 'NotFoundError') return 'Il browser non trova un microfono. Collegane uno e riprova.';
+  if (error?.name === 'NotReadableError' || error?.name === 'AbortError') {
+    return 'Il microfono non è disponibile. Verifica se è in uso e riprova.';
+  }
+  return 'Impossibile attivare il microfono. Verifica i permessi e riprova.';
+}
+
+function clearImageCanvas(canvas) {
+  canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function discardDraftImage() {
+  imageRequest = null;
+  imageBytes = null;
+  imageFile.value = '';
+  imageFile.removeAttribute('aria-invalid');
+  imagePreview.hidden = true;
+  clearImage.hidden = true;
+  clearImageCanvas(imagePreview);
+  setStatus(imageStatus, imageHint);
+  updateComposer();
+}
+
+imageFile.addEventListener('change', async () => {
+  const file = imageFile.files[0];
+  if (!file) {
+    discardDraftImage();
+    return;
+  }
+
+  const request = {};
+  imageRequest = request;
+  imageBytes = null;
+  imageFile.removeAttribute('aria-invalid');
+  imagePreview.hidden = true;
+  clearImage.hidden = false;
+  clearImageCanvas(imagePreview);
+  setStatus(imageStatus, 'Creazione della miniatura…');
+  updateComposer();
+
+  try {
+    const bytes = await encodeChirpImage(file);
+    if (imageRequest !== request) return;
+    drawChirpImage(imagePreview, bytes);
+    imageBytes = bytes;
+    imagePreview.hidden = false;
+    setStatus(imageStatus, `Miniatura ${CHIRP_IMAGE_SIZE} × ${CHIRP_IMAGE_SIZE} px pronta per l’invio.`, 'success');
+  } catch (error) {
+    if (imageRequest !== request) return;
+    imageFile.setAttribute('aria-invalid', 'true');
+    setStatus(imageStatus, error.message || 'Impossibile preparare l’immagine.', 'error');
+  } finally {
+    if (imageRequest === request) {
+      imageRequest = null;
+      updateComposer();
+    }
+  }
+});
+
+clearImage.addEventListener('click', () => {
+  discardDraftImage();
+  imageFile.focus();
+});
+
+function showReceivedPacket(packet) {
+  const isImage = packet.kind === 'binary' && isChirpImage(packet.bytes);
+  let value = '';
+  try {
+    if (isImage) {
+      drawChirpImage(receivedImage, packet.bytes);
+    } else if (packet.kind === 'binary') {
+      value = Array.from(packet.bytes, byte => byte.toString(16).padStart(2, '0')).join(' ');
+    } else {
+      value = messageDecoder.decode(packet.bytes);
+      if (packet.kind === 'json') JSON.parse(value);
+    }
+  } catch {
+    setStatus(listenStatus, 'Il segnale ricevuto contiene dati non validi. Chiedi di inviarlo di nuovo.', 'error');
+    return;
+  }
+
+  receivedKind.textContent = isImage ? 'Immagine' : { text: 'Testo', json: 'JSON', binary: 'Dati binari' }[packet.kind];
+  receivedMessage.textContent = value;
+  receivedMessage.hidden = isImage;
+  receivedImage.hidden = !isImage;
+  if (!isImage) clearImageCanvas(receivedImage);
+  receivedCard.hidden = false;
+  setStatus(listenStatus, 'Chirp ricevuto. Il microfono è ancora in ascolto.', 'success');
+  clearTimeout(receivedFlash);
+  scope.dataset.state = 'received';
+  receivedFlash = setTimeout(showScopeState, 1100);
+}
+
+sendForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (sendRequest) {
+    stopChirpSend();
+    return;
+  }
+
+  const packet = inspectMessage();
+  if (!packet.valid || selectedTab !== sendTab) return;
+
+  const request = {};
+  sendRequest = request;
+  const volume = Number(volumeInput.value) / 100;
+  const band = audioBand;
+  renderSendControls();
+  setStatus(sendStatus, band === 'ultrasonic' ? 'Trasmissione a ultrasuoni in corso…' : 'Trasmissione sonora in corso…');
+
+  try {
+    await getChirpModem().send({ kind: packet.kind, bytes: packet.bytes, volume, band });
+    if (sendRequest === request) {
+      setStatus(sendStatus, 'Riproduzione completata. Verifica la ricezione sull’altro dispositivo.', 'success');
+    }
+  } catch (error) {
+    if (sendRequest === request) setStatus(sendStatus, audioIssue(error, 'send', band), 'error');
+  } finally {
+    if (sendRequest === request) {
+      sendRequest = null;
+      renderSendControls();
+    }
+  }
+});
+
+listenButton.addEventListener('click', async () => {
+  if (listenRequest) {
+    stopChirpListen();
+    return;
+  }
+  if (selectedTab !== receiveTab) return;
+
+  const request = {};
+  listenRequest = request;
+  const band = audioBand;
+  renderListenControls();
+  setStatus(listenStatus, 'In attesa del microfono…');
+
+  try {
+    await getChirpModem().startListening(packet => {
+      if (listenRequest === request && listening) showReceivedPacket(packet);
+    }, () => {
+      if (listenRequest === request) stopChirpListen('Il microfono si è scollegato. Riattivalo per ricevere.');
+    }, band);
+    if (listenRequest === request) {
+      if (document.hidden) {
+        stopChirpListen();
+        return;
+      }
+      listening = true;
+      renderListenControls();
+      setStatus(listenStatus, band === 'ultrasonic'
+        ? 'In ascolto sugli ultrasuoni. Invia un chirp dall’altro dispositivo.'
+        : 'In ascolto. Invia un chirp dall’altro dispositivo.');
+    }
+  } catch (error) {
+    if (listenRequest === request) {
+      listenRequest = null;
+      listening = false;
+      renderListenControls();
+      setStatus(listenStatus, audioIssue(error, 'listen', band), 'error');
+    }
+  }
+});
+
+for (const tab of [sendTab, receiveTab]) {
+  tab.addEventListener('click', () => setActiveChirpTab(tab));
+  tab.addEventListener('keydown', event => {
+    const nextTab = {
+      ArrowLeft: tab === sendTab ? receiveTab : sendTab,
+      ArrowRight: tab === sendTab ? receiveTab : sendTab,
+      Home: sendTab,
+      End: receiveTab,
+    }[event.key];
+    if (nextTab) {
+      event.preventDefault();
+      setActiveChirpTab(nextTab, true);
+    }
+  });
+}
+
+function eraseReceived() {
+  receivedMessage.textContent = '';
+  receivedMessage.hidden = false;
+  receivedImage.hidden = true;
+  clearImageCanvas(receivedImage);
+  receivedKind.textContent = '';
+  receivedCard.hidden = true;
+  clearTimeout(receivedFlash);
+  showScopeState();
+}
+
+clearReceived.addEventListener('click', () => {
+  eraseReceived();
+  setStatus(listenStatus, listening ? 'Messaggio rimosso. Microfono in ascolto.' : 'Messaggio rimosso.');
+  listenButton.focus();
+});
+
+messageInput.addEventListener('input', updateComposer);
+textMode.addEventListener('change', updateComposer);
+jsonMode.addEventListener('change', updateComposer);
+imageMode.addEventListener('change', updateComposer);
+volumeInput.addEventListener('input', syncVolume);
+themeSelect.addEventListener('change', applyTheme);
+ultrasoundMode.addEventListener('change', applyTheme);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopChirpSend();
+    if (listening) stopChirpListen();
+  }
+});
+
+window.addEventListener('pagehide', () => {
+  stopChirpSend();
+  stopChirpListen();
+  chirpModem?.dispose().catch(() => {});
+  chirpModem = undefined;
+  messageInput.value = '';
+  discardDraftImage();
+  eraseReceived();
+  ultrasoundMode.checked = false;
+  applyTheme();
+});
+
+setActiveChirpTab(sendTab);
+ultrasoundMode.checked = false;
+applyTheme();
+renderSendControls();
+renderListenControls();
+
+  </script>
+</body>
+</html>
