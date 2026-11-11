@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it" data-theme="rust" data-band="audible">
+<html lang="it" data-theme="rust">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -321,18 +321,6 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
 .pixel-preview { display: block; flex: 0 0 auto; width: 96px; height: 96px; border: 1px solid var(--field-edge); border-radius: 6px; background: #f8f8f5; image-rendering: pixelated; }
 .received .pixel-preview { margin-top: 8px; }
 
-.ultrasound-settings { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; padding: 15px 24px; border-bottom: 1px solid var(--line); background: var(--recess); }
-.ultrasound-settings h2 { margin: 0; font: 700 14px/1.4 var(--serif); }
-.ultrasound-settings h2 span { margin-left: 6px; color: var(--muted); font-size: 11px; font-weight: 400; }
-.ultrasound-settings p { color: var(--muted); margin: 4px 0 0; font-size: 12px; line-height: 1.45; }
-.band-switch { display: inline-flex; align-items: center; gap: 8px; flex: none; color: var(--ink); font-size: 12px; font-weight: 650; cursor: pointer; }
-.band-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.switch-track { display: inline-flex; align-items: center; width: 34px; height: 19px; padding: 2px; border: 1px solid var(--field-edge); border-radius: 12px; background: var(--white); }
-.switch-track::before { content: ""; display: block; width: 13px; height: 13px; border-radius: 50%; background: var(--muted); transition: transform .15s; }
-.band-switch input:checked + .switch-track { background: var(--accent); border-color: var(--accent); }
-.band-switch input:checked + .switch-track::before { background: var(--button-text); transform: translateX(15px); }
-.band-switch input:focus-visible + .switch-track { outline: 2px solid var(--accent); outline-offset: 4px; }
-
 [data-theme="winamp"] .hero h1 { font-size: clamp(40px, 5.25vw, 67px); line-height: 1.05; }
 [data-theme="winamp"] .hero h1 em { font-style: normal; }
 [data-theme="winamp"] .brand-mark, [data-theme="winamp"] .theme-picker select, [data-theme="winamp"] .console, [data-theme="winamp"] .tabs, [data-theme="winamp"] .tabs button, [data-theme="winamp"] .primary, [data-theme="winamp"] textarea { border-radius: 4px; }
@@ -342,8 +330,6 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
 [data-theme="winamp"] .scope-grid { background-image: repeating-linear-gradient(0deg, transparent 0 5px, #93c58e44 5px 6px), repeating-linear-gradient(90deg, transparent 0 20px, #93c58e44 20px 21px); background-size: auto; mask-image: none; }
 [data-theme="winamp"] .scope-orbit { display: none; }
 [data-theme="winamp"] .wave i { width: 5px; border-radius: 0; background: repeating-linear-gradient(to top, currentColor 0 4px, transparent 4px 6px); filter: drop-shadow(0 0 4px #8df96c55); }
-[data-theme="winamp"][data-band="ultrasonic"] .wave { color: #7ef0da; }
-[data-theme="winamp"][data-band="ultrasonic"] .scope { border-color: #577e74; }
 
 .page-footer { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; padding-block: 19px 25px; color: var(--muted); font-size: 12px; }
 .page-footer p { margin: 0; }
@@ -374,7 +360,6 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
   .wave { height: 67px; gap: 5px; }
   .wave i { width: 2px; }
   .console { grid-template-columns: minmax(0, 1fr); border-radius: 18px; }
-  .ultrasound-settings { align-items: start; flex-direction: column; padding: 12px 16px; }
   .console-main { padding: 16px 16px 11px; }
   .tabs { margin-bottom: 15px; }
   .instructions { border-left: 0; border-top: 1px solid var(--line); padding: 19px 16px 21px; }
@@ -393,7 +378,7 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
 }
 @media (prefers-reduced-motion: reduce) {
   .scope .wave i { animation: none !important; }
-  .primary, .switch-track::before { transition: none; }
+  .primary { transition: none; }
 }
 
   </style>
@@ -444,17 +429,6 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
     </section>
 
     <section class="console" aria-label="Scambio di messaggi">
-      <section class="ultrasound-settings" id="ultrasound-settings" aria-labelledby="ultrasound-title" hidden>
-        <div>
-          <h2 id="ultrasound-title">Ultrasuoni <span>Sperimentale</span></h2>
-          <p id="ultrasound-help">Attivali su entrambi i dispositivi. La ricezione dipende dall’hardware. Il segnale può essere percepito da alcune persone e animali.</p>
-        </div>
-        <label class="band-switch" for="ultrasound-mode">
-          <input type="checkbox" id="ultrasound-mode" role="switch" aria-describedby="ultrasound-help">
-          <span class="switch-track" aria-hidden="true"></span>
-          <span>Usa ultrasuoni</span>
-        </label>
-      </section>
       <div class="console-main">
         <div class="tabs" role="tablist" aria-label="Modalità di scambio">
           <button type="button" id="send-tab" role="tab" aria-controls="send-panel" aria-selected="true"><span class="tab-symbol" aria-hidden="true">↗</span> Invia</button>
@@ -526,7 +500,7 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
           <li><span class="step-mark" aria-hidden="true">↙</span><div><strong>Attiva la ricezione</strong><p>Su un dispositivo, apri <b>Ricevi</b> e consenti l’uso del microfono.</p></div></li>
           <li><span class="step-mark" aria-hidden="true">↗</span><div><strong>Invia un chirp</strong><p>Sull’altro, scrivi un messaggio o scegli un’immagine, poi premi <b>Invia il chirp</b>.</p></div></li>
         </ol>
-        <p class="audio-note"><span class="note-dot" aria-hidden="true"></span><span id="band-note">Il segnale è udibile. Inizia a volume basso.</span></p>
+        <p class="audio-note"><span class="note-dot" aria-hidden="true"></span><span>Il segnale è udibile. Inizia a volume basso.</span></p>
       </aside>
     </section>
     <footer class="page-footer"><p>Nessuna cronologia. I messaggi restano in memoria fino alla chiusura o al ricaricamento della pagina.</p><span>Chirp by Globetrotta</span></footer>
@@ -535,58 +509,25 @@ textarea[aria-invalid="true"] { border-color: var(--accent); }
   <script type="module">
 export const MAX_PAYLOAD_BYTES = 144;
 export const MAX_BINARY_BYTES = 255;
-export const ULTRASONIC_MAX_VOLUME = 0.05;
 
-const COMMON_FORMAT = {
+const FORMAT = {
   maxPayloadBytes: MAX_PAYLOAD_BYTES,
   maxBinaryBytes: MAX_BINARY_BYTES,
   lead: [0, 0, 0],
   kinds: ['text', 'json', 'binary'],
   version: 0x10,
   silenceSeconds: 0.08,
+  frequencies: [1200, 1380, 1560, 1740, 1920, 2100, 2280, 2460],
+  sync: [7, 2, 6, 3, 1, 5, 0, 4, 2, 5, 1, 6, 4, 0, 3, 2],
+  bitsPerSymbol: 3,
+  symbolSeconds: 0.024,
+  defaultVolume: 0.16,
+  maxVolume: 0.25,
 };
 
-const FORMATS = {
-  audible: {
-    ...COMMON_FORMAT,
-    frequencies: [1200, 1380, 1560, 1740, 1920, 2100, 2280, 2460],
-    sync: [7, 2, 6, 3, 1, 5, 0, 4, 2, 5, 1, 6, 4, 0, 3, 2],
-    bitsPerSymbol: 3,
-    symbolSeconds: 0.024,
-    defaultVolume: 0.16,
-    maxVolume: 0.25,
-  },
-  ultrasonic: {
-    ...COMMON_FORMAT,
-    frequencies: [20200, 20440, 20680, 20920],
-    sync: [3, 0, 1, 2, 0, 2, 1, 2, 1, 0, 2, 0, 1, 2, 0, 1, 0, 2, 1, 0],
-    bitsPerSymbol: 2,
-    symbolSeconds: 0.016,
-    minimumSampleRate: 44100,
-    suppressLowFrequencies: true,
-    defaultVolume: 0.032,
-    maxVolume: ULTRASONIC_MAX_VOLUME,
-  },
-};
-
-function getFormat(band) {
-  if (!Object.hasOwn(FORMATS, band)) throw new RangeError('Banda audio non valida.');
-  return FORMATS[band];
-}
-
-function assertSampleRate(format, sampleRate) {
-  if (format.minimumSampleRate && sampleRate < format.minimumSampleRate) {
-    throw new DOMException('Gli ultrasuoni richiedono un campionamento audio di almeno 44,1 kHz.', 'NotSupportedError');
-  }
-}
-
-function durationForFormat(byteLength, format) {
-  const symbolCount = format.lead.length + format.sync.length + Math.ceil((byteLength + 4) * 8 / format.bitsPerSymbol);
-  return format.silenceSeconds * 2 + symbolCount * format.symbolSeconds;
-}
-
-export function estimateDuration(byteLength, band = 'audible') {
-  return durationForFormat(byteLength, getFormat(band));
+export function estimateDuration(byteLength) {
+  const symbolCount = FORMAT.lead.length + FORMAT.sync.length + Math.ceil((byteLength + 4) * 8 / FORMAT.bitsPerSymbol);
+  return FORMAT.silenceSeconds * 2 + symbolCount * FORMAT.symbolSeconds;
 }
 
 function crc16(bytes, length) {
@@ -600,9 +541,8 @@ function crc16(bytes, length) {
   return crc;
 }
 
-export function renderPacket({ kind, bytes, volume, band = 'audible' }, sampleRate) {
-  const format = getFormat(band);
-  assertSampleRate(format, sampleRate);
+export function renderPacket({ kind, bytes, volume }, sampleRate) {
+  const format = FORMAT;
   const kindIndex = format.kinds.indexOf(kind);
   const maxBytes = kind === 'binary' ? format.maxBinaryBytes : format.maxPayloadBytes;
   if (kindIndex < 0 || !(bytes instanceof Uint8Array) || bytes.length === 0 || bytes.length > maxBytes) {
@@ -636,7 +576,7 @@ export function renderPacket({ kind, bytes, volume, band = 'audible' }, sampleRa
   }
   if (bitCount) symbols.push(pending << (format.bitsPerSymbol - bitCount));
 
-  const samples = new Float32Array(Math.ceil(durationForFormat(bytes.length, format) * sampleRate));
+  const samples = new Float32Array(Math.ceil(estimateDuration(bytes.length) * sampleRate));
   const ramp = Math.max(1, Math.round(sampleRate * 0.0018));
   const padding = format.silenceSeconds * sampleRate;
   const symbolSamples = format.symbolSeconds * sampleRate;
@@ -656,9 +596,7 @@ export function renderPacket({ kind, bytes, volume, band = 'audible' }, sampleRa
 
 // This function also runs in an AudioWorklet. All dependencies arrive as arguments.
 function createDecoder(sampleRate, onPacket, format, checksum) {
-  // Averaging during downsampling would attenuate the ultrasonic tones.
-  const suppressLowFrequencies = format.suppressLowFrequencies;
-  const decimation = suppressLowFrequencies ? 1 : Math.max(1, Math.floor(sampleRate / 12000));
+  const decimation = Math.max(1, Math.floor(sampleRate / 12000));
   const analysisRate = sampleRate / decimation;
   const phaseCount = 8;
   const symbolSamples = format.symbolSeconds * analysisRate;
@@ -669,8 +607,6 @@ function createDecoder(sampleRate, onPacket, format, checksum) {
   const tracks = Array.from({ length: phaseCount }, () => ({ bytes: new Uint8Array(format.maxBinaryBytes + 4) }));
   let inputCount;
   let inputSum;
-  let previousInput;
-  let previousDifference;
   let writeIndex;
   let sampleCount;
   let nextAnalysis;
@@ -689,8 +625,6 @@ function createDecoder(sampleRate, onPacket, format, checksum) {
     tracks.forEach(resetTrack);
     inputCount = 0;
     inputSum = 0;
-    previousInput = 0;
-    previousDifference = 0;
     writeIndex = 0;
     sampleCount = 0;
     nextAnalysis = windowSize;
@@ -786,16 +720,9 @@ function createDecoder(sampleRate, onPacket, format, checksum) {
       inputSum += input[index];
       if (inputCount < decimation) continue;
 
-      let sample = inputSum / decimation;
+      const sample = inputSum / decimation;
       inputCount = 0;
       inputSum = 0;
-      if (suppressLowFrequencies) {
-        const difference = sample - previousInput;
-        previousInput = sample;
-        // Two first differences reduce audible background energy.
-        sample = (difference - previousDifference) * 0.25;
-        previousDifference = difference;
-      }
       samples[writeIndex] = sample;
       samples[writeIndex + windowSize] = sample;
       writeIndex = (writeIndex + 1) % windowSize;
@@ -812,10 +739,8 @@ function createDecoder(sampleRate, onPacket, format, checksum) {
   return { process, reset };
 }
 
-export function createPacketDecoder(sampleRate, onPacket, band = 'audible') {
-  const format = getFormat(band);
-  assertSampleRate(format, sampleRate);
-  return createDecoder(sampleRate, onPacket, format, crc16);
+export function createPacketDecoder(sampleRate, onPacket) {
+  return createDecoder(sampleRate, onPacket, FORMAT, crc16);
 }
 
 const PROCESSOR_NAME = 'globetrotta-chirp-receiver';
@@ -824,14 +749,14 @@ async function addReceiverModule(context) {
   const source = `
     const makeDecoder = ${createDecoder.toString()};
     const checksum = ${crc16.toString()};
-    const formats = ${JSON.stringify(FORMATS)};
+    const format = ${JSON.stringify(FORMAT)};
     class ChirpReceiver extends AudioWorkletProcessor {
-      constructor({ processorOptions }) {
+      constructor() {
         super();
         this.muted = false;
         this.decoder = makeDecoder(sampleRate, (packet) => {
           this.port.postMessage(packet, [packet.bytes.buffer]);
-        }, formats[processorOptions.band], checksum);
+        }, format, checksum);
         this.port.onmessage = ({ data }) => {
           this.muted = data.muted;
           this.decoder.reset();
@@ -853,9 +778,9 @@ async function addReceiverModule(context) {
   }
 }
 
-function makeFallbackReceiver(context, onPacket, band) {
+function makeFallbackReceiver(context, onPacket) {
   const node = context.createScriptProcessor(1024, 1, 1);
-  const decoder = createPacketDecoder(context.sampleRate, onPacket, band);
+  const decoder = createPacketDecoder(context.sampleRate, onPacket);
   let muted = false;
   node.onaudioprocess = ({ inputBuffer, outputBuffer }) => {
     outputBuffer.getChannelData(0).fill(0);
@@ -892,7 +817,7 @@ export class AcousticModem {
     return this.#context;
   }
 
-  async #makeReceiver(context, onPacket, onEnded, band) {
+  async #makeReceiver(context, onPacket, onEnded) {
     if (context.audioWorklet && globalThis.AudioWorkletNode) {
       try {
         this.#module ??= addReceiverModule(context);
@@ -901,7 +826,6 @@ export class AcousticModem {
           numberOfInputs: 1,
           numberOfOutputs: 1,
           outputChannelCount: [1],
-          processorOptions: { band },
         });
         node.port.onmessage = ({ data }) => onPacket(data);
         node.onprocessorerror = onEnded;
@@ -919,18 +843,16 @@ export class AcousticModem {
         if (!context.createScriptProcessor) throw error;
       }
     }
-    return makeFallbackReceiver(context, onPacket, band);
+    return makeFallbackReceiver(context, onPacket);
   }
 
-  async startListening(onPacket, onEnded, band = 'audible') {
+  async startListening(onPacket, onEnded) {
     if (this.#listener) return;
     if (!navigator.mediaDevices?.getUserMedia) {
       throw new Error('Il microfono richiede una pagina HTTPS o localhost.');
     }
 
     const context = this.#audioContext();
-    const format = getFormat(band);
-    assertSampleRate(format, context.sampleRate);
     const listener = {};
     this.#listener = listener;
     const endListener = () => {
@@ -953,10 +875,9 @@ export class AcousticModem {
       const [stream] = await Promise.all([streamReady, context.resume()]);
       const track = stream.getAudioTracks()[0];
       if (!track || track.readyState === 'ended') throw new Error('Il microfono non è più disponibile.');
-      assertSampleRate(format, track.getSettings?.().sampleRate);
       listener.receiver = await this.#makeReceiver(context, (packet) => {
         if (this.#listener === listener && !this.#playback) onPacket(packet);
-      }, endListener, band);
+      }, endListener);
       if (this.#listener !== listener) {
         listener.receiver.close();
         throw abortError();
@@ -1251,9 +1172,6 @@ const receiveTab = chirpElement('receive-tab');
 const sendPanel = chirpElement('send-panel');
 const receivePanel = chirpElement('receive-panel');
 const themeSelect = chirpElement('theme-select');
-const ultrasoundSettings = chirpElement('ultrasound-settings');
-const ultrasoundMode = chirpElement('ultrasound-mode');
-const bandNote = chirpElement('band-note');
 const sendForm = chirpElement('send-form');
 const messageInput = chirpElement('message');
 const messageLabel = chirpElement('message-label');
@@ -1288,12 +1206,9 @@ const messageEncoder = new TextEncoder();
 const messageDecoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 const secondsFormat = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 1 });
 const imageHint = 'JPG, PNG, WebP, GIF o AVIF · max 10 MB.';
-const audibleVolumeRange = { min: volumeInput.min, max: volumeInput.max };
-const savedVolume = { audible: volumeInput.value, ultrasonic: '3' };
 
 let chirpModem;
 let selectedTab = sendTab;
-let audioBand = 'audible';
 let imageBytes = null;
 let imageRequest = null;
 let sendRequest = null;
@@ -1354,12 +1269,11 @@ function updateComposer() {
     setStatus(messageHelp, packet.error || (isJson ? 'Anche spazi e a capo contano nel limite.' : 'Accenti ed emoji possono occupare più di un byte.'), packet.error ? 'error' : 'neutral');
   }
 
-  duration.textContent = packet.valid ? `${secondsFormat.format(estimateDuration(packet.bytes.length, audioBand))} s` : '—';
+  duration.textContent = packet.valid ? `${secondsFormat.format(estimateDuration(packet.bytes.length))} s` : '—';
   sendButton.disabled = !packet.valid && !sendRequest;
 }
 
 function syncVolume() {
-  savedVolume[audioBand] = volumeInput.value;
   volumeValue.textContent = `${volumeInput.value}%`;
   volumeInput.setAttribute('aria-valuetext', `${volumeInput.value} per cento`);
   const percent = (Number(volumeInput.value) - Number(volumeInput.min)) / (Number(volumeInput.max) - Number(volumeInput.min));
@@ -1367,28 +1281,7 @@ function syncVolume() {
 }
 
 function applyTheme() {
-  const theme = themeSelect.value;
-  const isWinamp = theme === 'winamp';
-  document.documentElement.dataset.theme = theme;
-  ultrasoundSettings.hidden = !isWinamp;
-  if (!isWinamp) ultrasoundMode.checked = false;
-
-  const nextBand = ultrasoundMode.checked ? 'ultrasonic' : 'audible';
-  if (nextBand !== audioBand) {
-    stopChirpSend('Trasmissione interrotta. La modalità audio è cambiata.');
-    stopChirpListen('Modalità audio cambiata. Riattiva il microfono per ricevere.');
-  }
-
-  audioBand = nextBand;
-  document.documentElement.dataset.band = audioBand;
-  bandNote.textContent = audioBand === 'ultrasonic'
-    ? 'Ultrasuoni attivi. Se la ricezione fallisce, passa ai toni udibili su entrambi.'
-    : 'Il segnale è udibile. Inizia a volume basso.';
-  volumeInput.min = audioBand === 'ultrasonic' ? '1' : audibleVolumeRange.min;
-  volumeInput.max = audioBand === 'ultrasonic' ? String(100 * ULTRASONIC_MAX_VOLUME) : audibleVolumeRange.max;
-  volumeInput.value = savedVolume[audioBand];
-  syncVolume();
-  updateComposer();
+  document.documentElement.dataset.theme = themeSelect.value;
 }
 
 function renderSendControls() {
@@ -1445,10 +1338,9 @@ function setActiveChirpTab(tab, moveFocus = false) {
   if (moveFocus) tab.focus();
 }
 
-function audioIssue(error, action, band) {
+function audioIssue(error, action) {
   if (!(globalThis.AudioContext ?? globalThis.webkitAudioContext)) return 'Questo browser non supporta la riproduzione e l’ascolto dei chirp.';
   if (!window.isSecureContext) return 'Per usare l’audio, apri la pagina via HTTPS o su localhost.';
-  if (band === 'ultrasonic' && error?.name === 'NotSupportedError') return error.message;
   if (action === 'send') return 'Riproduzione non riuscita. Verifica l’uscita audio e riprova.';
   if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
     return 'Consenti l’accesso al microfono nelle impostazioni del browser, poi riprova.';
@@ -1559,17 +1451,16 @@ sendForm.addEventListener('submit', async event => {
   const request = {};
   sendRequest = request;
   const volume = Number(volumeInput.value) / 100;
-  const band = audioBand;
   renderSendControls();
-  setStatus(sendStatus, band === 'ultrasonic' ? 'Trasmissione a ultrasuoni in corso…' : 'Trasmissione sonora in corso…');
+  setStatus(sendStatus, 'Trasmissione sonora in corso…');
 
   try {
-    await getChirpModem().send({ kind: packet.kind, bytes: packet.bytes, volume, band });
+    await getChirpModem().send({ kind: packet.kind, bytes: packet.bytes, volume });
     if (sendRequest === request) {
       setStatus(sendStatus, 'Riproduzione completata. Verifica la ricezione sull’altro dispositivo.', 'success');
     }
   } catch (error) {
-    if (sendRequest === request) setStatus(sendStatus, audioIssue(error, 'send', band), 'error');
+    if (sendRequest === request) setStatus(sendStatus, audioIssue(error, 'send'), 'error');
   } finally {
     if (sendRequest === request) {
       sendRequest = null;
@@ -1587,7 +1478,6 @@ listenButton.addEventListener('click', async () => {
 
   const request = {};
   listenRequest = request;
-  const band = audioBand;
   renderListenControls();
   setStatus(listenStatus, 'In attesa del microfono…');
 
@@ -1596,7 +1486,7 @@ listenButton.addEventListener('click', async () => {
       if (listenRequest === request && listening) showReceivedPacket(packet);
     }, () => {
       if (listenRequest === request) stopChirpListen('Il microfono si è scollegato. Riattivalo per ricevere.');
-    }, band);
+    });
     if (listenRequest === request) {
       if (document.hidden) {
         stopChirpListen();
@@ -1604,16 +1494,14 @@ listenButton.addEventListener('click', async () => {
       }
       listening = true;
       renderListenControls();
-      setStatus(listenStatus, band === 'ultrasonic'
-        ? 'In ascolto sugli ultrasuoni. Invia un chirp dall’altro dispositivo.'
-        : 'In ascolto. Invia un chirp dall’altro dispositivo.');
+      setStatus(listenStatus, 'In ascolto. Invia un chirp dall’altro dispositivo.');
     }
   } catch (error) {
     if (listenRequest === request) {
       listenRequest = null;
       listening = false;
       renderListenControls();
-      setStatus(listenStatus, audioIssue(error, 'listen', band), 'error');
+      setStatus(listenStatus, audioIssue(error, 'listen'), 'error');
     }
   }
 });
@@ -1657,7 +1545,6 @@ jsonMode.addEventListener('change', updateComposer);
 imageMode.addEventListener('change', updateComposer);
 volumeInput.addEventListener('input', syncVolume);
 themeSelect.addEventListener('change', applyTheme);
-ultrasoundMode.addEventListener('change', applyTheme);
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
@@ -1674,13 +1561,11 @@ window.addEventListener('pagehide', () => {
   messageInput.value = '';
   discardDraftImage();
   eraseReceived();
-  ultrasoundMode.checked = false;
-  applyTheme();
 });
 
 setActiveChirpTab(sendTab);
-ultrasoundMode.checked = false;
 applyTheme();
+syncVolume();
 renderSendControls();
 renderListenControls();
 
